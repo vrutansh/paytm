@@ -1,39 +1,41 @@
-// backend/db.js
-const mongoose = require('mongoose');
+const mongoose =require("mongoose");
+const Schema=mongoose.Schema;
+const ObjectId=Schema.ObjectId;
 
-// Create a Schema for Users
-const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        lowercase: true,
-        minLength: 3,
-        maxLength: 30
+const User=new Schema({
+    firstname:{
+        type:String,
+        lowercase:true
     },
-    password: {
-        type: String,
-        required: true,
-        minLength: 6
+    lastname:{
+        type:String,
+        lowercase:true
     },
-    firstName: {
-        type: String,
-        required: true,
-        trim: true,
-        maxLength: 50
+    username:{
+        type:String,
+        unique:true,
+        lowercase:true
     },
-    lastName: {
-        type: String,
-        required: true,
-        trim: true,
-        maxLength: 50
-    }
+    password:String
 });
 
-// Create a model from the schema
-const User = mongoose.model('User', userSchema);
+const Account=new Schema({
+    userId:{
+        type:ObjectId,
+        required:true,
+        ref:"UserModel"
+    },
+    balance:{
+        type:Number,
+        required:true
+    }
+})
 
-module.exports = {
-	User
+
+const UserModel=mongoose.model("users",User);
+const AccountModel=mongoose.model("account",Account)
+
+module.exports={
+    UserModel:UserModel,
+    AccountModel:AccountModel
 };

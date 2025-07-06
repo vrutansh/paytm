@@ -1,17 +1,28 @@
 const express = require("express");
-const mainRouter = require("./routes/route")
-const cors = require("cors");
-const PORT = 3000;
+const mongoose=require("mongoose");
+const { DB_URL } = require("./config");
+const { router } = require("./routes");
+const { userRouter } = require("./routes/user");
+const cors = require('cors');
+const { accountRouter } = require("./routes/account");
 
-const app = express();
+async function connectDB(){
+    try{
+        await mongoose.connect(DB_URL);
+        console.log("Connected To The DataBase");
+    }
+    catch{
+        console.log("Error in Connecting to the DataBase");
+    }
+}
+connectDB();
 
+const app=express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/v1",router);
 
-app.use("/api/v1",mainRouter)
 
-app.listen(PORT, function (err) {
-    if (err) console.log(err);
-    console.log("Server listening on PORT", PORT);
-});
+app.listen(3000);
+
